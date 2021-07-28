@@ -1,0 +1,28 @@
+---
+- name: Install dependencies for gvm setup
+  become: true
+  apt:
+    pkg:
+      - binutils
+      - bison
+      - gcc
+      - make
+
+- name: Create temporary directory for gvm setup
+  file:
+    state: directory
+    path: '{{ playbook_dir }}/tmp/gvm-setup'
+  register: gvm_setup_tempdir
+
+- name: Download gvm script
+  get_url:
+    dest: '{{ gvm_setup_tempdir.path }}/install.sh'
+    mode: '0755'
+    url: 'https://raw.githubusercontent.com/moovweb/gvm/master/binscripts/gvm-installer'
+
+- name: Execute gvm script
+  shell:
+    cmd: '{{ gvm_setup_tempdir.path }}/install.sh'
+    creates: '{{ user_home }}/.gvm'
+  args:
+    executable: /bin/bash

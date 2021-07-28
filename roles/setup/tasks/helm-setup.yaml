@@ -1,0 +1,32 @@
+---
+- name: Create temporary directory for helm setup
+  file:
+    state: directory
+    path: '{{ playbook_dir }}/tmp/helm-setup'
+  register: helm_setup_tempdir
+
+- name: Fetch stable version for helm
+  uri:
+    url: https://api.github.com/repos/helm/helm/releases/latest
+    return_content: true
+  register: helm_release_facts
+
+- name: Download helm archive
+  get_url:
+    dest: '{{ helm_setup_tempdir.path }}/helm.tar.gz'
+    url: 'https://get.helm.sh/helm-{{ helm_release_facts.json.tag_name }}-linux-amd64.tar.gz'
+
+- name: Extract helm archive
+  unarchive:
+    dest: '{{ helm_setup_tempdir.path }}'
+    src: '{{ helm_setup_tempdir.path }}/helm.tar.gz'
+
+- name: Install helm
+  become: true
+  copy:
+    dest: /usr/local/bin/helm
+    group: root
+    mode: '0755'
+    owner: root
+    remote_src: yes
+    src: '{{ helm_setup_tempdir.path }}/linux-amd64/helm'

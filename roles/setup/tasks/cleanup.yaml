@@ -1,0 +1,5 @@
+---
+- name: Recursively remove tmp directory
+  file:
+    path: '{{ playbook_dir }}/tmp'
+    state: absent

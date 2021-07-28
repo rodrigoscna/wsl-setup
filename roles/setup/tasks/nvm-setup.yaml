@@ -1,0 +1,40 @@
+---
+- name: Create temporary directory for nvm setup
+  file:
+    state: directory
+    path: '{{ playbook_dir }}/tmp/nvm-setup'
+  register: nvm_setup_tempdir
+
+- name: Fetch stable version for nvm
+  uri:
+    url: https://api.github.com/repos/nvm-sh/nvm/releases/latest
+    return_content: true
+  register: nvm_release_facts
+
+- name: Download nvm script
+  get_url:
+    dest: '{{ nvm_setup_tempdir.path }}/install.sh'
+    mode: '0755'
+    url: 'https://raw.githubusercontent.com/nvm-sh/nvm/{{ nvm_release_facts.json.tag_name }}/install.sh'
+
+- name: Execute nvm script
+  shell:
+    cmd: '{{ nvm_setup_tempdir.path }}/install.sh'
+    creates: '{{ user_home }}/.nvm'
+  args:
+    executable: /bin/bash
+
+- name: Ensure nvm is loaded with bash
+  blockinfile:
+    insertafter: 'EOF'
+    path: '{{ user_home }}/.bashrc'
+    block: |-
+      # set NVM_PATH so NVM can be loaded
+      if [ -d "$HOME/.nvm" ] ; then
+        NVM_DIR="$HOME/.nvm"
+      fi
+
+      # load NVM if it is available
+      if [ -s "$NVM_DIR/nvm.sh" ] ; then
+        . "$NVM_DIR/nvm.sh"
+      fi

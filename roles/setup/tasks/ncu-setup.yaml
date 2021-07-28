@@ -1,0 +1,5 @@
+---
+- name: Install npm-check-updates globally
+  community.general.npm:
+    global: yes
+    name: npm-check-updates

@@ -1,0 +1,5 @@
+---
+- name: Install prettier globally
+  community.general.npm:
+    global: yes
+    name: prettier

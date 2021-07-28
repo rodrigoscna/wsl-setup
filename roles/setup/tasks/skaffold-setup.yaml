@@ -1,0 +1,9 @@
+---
+- name: Download and install skaffold
+  become: true
+  get_url:
+    dest: /usr/local/bin/skaffold
+    group: root
+    mode: '0755'
+    owner: root
+    url: 'https://storage.googleapis.com/skaffold/releases/latest/skaffold-linux-amd64'

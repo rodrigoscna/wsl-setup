@@ -1,0 +1,27 @@
+---
+- name: Install dependencies for bazel setup
+  become: true
+  apt:
+    pkg:
+      - curl
+      - gnupg
+
+- name: Add apt sining key for bazel setup
+  become: true
+  ansible.builtin.apt_key:
+    url: https://bazel.build/bazel-release.pub.gpg
+    state: present
+
+- name: Add repository for bazel setup
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8
+    filename: bazel
+    state: present
+
+- name: Install bazel
+  become: true
+  apt:
+    name: bazel
+    update_cache: yes
+    state: present

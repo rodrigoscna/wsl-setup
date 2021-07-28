@@ -1,0 +1,93 @@
+---
+- name: Setup
+  hosts: [localhost]
+  tasks:
+    - name: Get user info
+      set_fact:
+        user_name: '{{ lookup("env", "USER") }}'
+        user_home: '{{ lookup("env", "HOME") }}'
+
+    - name: Install bazel
+      include_role:
+        name: setup
+        tasks_from: bazel-setup
+
+    - name: Install kubectl
+      include_role:
+        name: setup
+        tasks_from: kubectl-setup
+
+    - name: Install minikube
+      include_role:
+        name: setup
+        tasks_from: minikube-setup
+
+    - name: Install helm
+      include_role:
+        name: setup
+        tasks_from: helm-setup
+
+    - name: Install packer
+      include_role:
+        name: setup
+        tasks_from: packer-setup
+
+    - name: Install skaffold
+      include_role:
+        name: setup
+        tasks_from: skaffold-setup
+
+    - name: Install terraform
+      include_role:
+        name: setup
+        tasks_from: terraform-setup
+
+    - name: Install tilt
+      include_role:
+        name: setup
+        tasks_from: tilt-setup
+
+    - name: Install nvm
+      include_role:
+        name: setup
+        tasks_from: nvm-setup
+
+    - name: Install node
+      include_role:
+        name: setup
+        tasks_from: node-setup
+
+    - name: Install npm-check-updates
+      include_role:
+        name: setup
+        tasks_from: ncu-setup
+
+    - name: Install pnpm
+      include_role:
+        name: setup
+        tasks_from: pnpm-setup
+
+    - name: Install prettier
+      include_role:
+        name: setup
+        tasks_from: prettier-setup
+
+    - name: Install rush
+      include_role:
+        name: setup
+        tasks_from: rush-setup
+
+    - name: Install gvm
+      include_role:
+        name: setup
+        tasks_from: gvm-setup
+
+    - name: Install go
+      include_role:
+        name: setup
+        tasks_from: go-setup
+
+    - name: Install vscode live share
+      include_role:
+        name: setup
+        tasks_from: vsls-setup

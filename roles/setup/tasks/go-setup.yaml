@@ -1,0 +1,51 @@
+---
+- name: Install go 1.4
+  shell:
+    cmd: 'source {{ user_home }}/.gvm/scripts/gvm ; gvm install go1.4 -B'
+  args:
+    executable: /bin/bash
+
+- name: Install go 1.17
+  shell:
+    cmd: 'source {{ user_home }}/.gvm/scripts/gvm ; gvm use go1.4 ; gvm install go1.17'
+  args:
+    executable: /bin/bash
+
+- name: Set default go to 1.17
+  shell:
+    cmd: 'source {{ user_home }}/.gvm/scripts/gvm ; gvm use go1.17 --default'
+  args:
+    executable: /bin/bash
+
+- name: Install gocode
+  shell:
+    cmd: go install github.com/stamblerre/gocode@latest
+    creates: '${GOPATH}/bin/gocode'
+  args:
+    executable: /bin/bash
+
+- name: Install go tools
+  shell:
+    cmd: go install {{ item.package }}
+    creates: "{{ item.creates }}"
+  args:
+    executable: /bin/bash
+  loop:
+    - package: "github.com/uudashr/gopkgs/v2/cmd/gopkgs@latest"
+      creates: "${GOPATH}/bin/gopkgs"
+    - package: "github.com/ramya-rao-a/go-outline@latest"
+      creates: "${GOPATH}/bin/go-outline"
+    - package: "github.com/cweill/gotests/gotests@latest"
+      creates: "${GOPATH}/bin/gotests"
+    - package: "github.com/fatih/gomodifytags@latest"
+      creates: "${GOPATH}/bin/gomodifytags"
+    - package: "github.com/josharian/impl@latest"
+      creates: "${GOPATH}/bin/impl"
+    - package: "github.com/haya14busa/goplay/cmd/goplay@latest"
+      creates: "${GOPATH}/bin/goplay"
+    - package: "github.com/go-delve/delve/cmd/dlv@latest"
+      creates: "${GOPATH}/bin/dlv"
+    - package: "honnef.co/go/tools/cmd/staticcheck@latest"
+      creates: "${GOPATH}/bin/staticcheck"
+    - package: "golang.org/x/tools/gopls@latest"
+      creates: "${GOPATH}/bin/gopls"

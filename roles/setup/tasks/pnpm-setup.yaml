@@ -1,0 +1,5 @@
+---
+- name: Install pnpm globally
+  community.general.npm:
+    global: yes
+    name: pnpm

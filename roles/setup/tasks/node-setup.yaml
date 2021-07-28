@@ -1,0 +1,18 @@
+---
+- name: Install node stable
+  shell:
+    cmd: 'source {{ user_home }}/.nvm/nvm.sh ; nvm install stable'
+  args:
+    executable: /bin/bash
+
+- name: Install node lts
+  shell:
+    cmd: 'source {{ user_home }}/.nvm/nvm.sh ; nvm install --lts'
+  args:
+    executable: /bin/bash
+
+- name: Set default node to stable
+  shell:
+    cmd: 'source {{ user_home }}/.nvm/nvm.sh ; nvm alias default stable'
+  args:
+    executable: /bin/bash

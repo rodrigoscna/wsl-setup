@@ -1,0 +1,15 @@
+---
+- name: Fetch stable version for kubectl
+  uri:
+    url: https://dl.k8s.io/release/stable.txt
+    return_content: true
+  register: clusterctl_release_facts
+
+- name: Download and install kubectl
+  become: true
+  get_url:
+    dest: /usr/local/bin/kubectl
+    group: root
+    mode: '0755'
+    owner: root
+    url: 'https://dl.k8s.io/release/{{ clusterctl_release_facts.content }}/bin/linux/amd64/kubectl'

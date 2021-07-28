@@ -1,0 +1,27 @@
+---
+- name: Install dependencies for terraform setup
+  become: true
+  apt:
+    pkg:
+      - curl
+      - gnupg
+
+- name: Add apt sining key for terraform setup
+  become: true
+  ansible.builtin.apt_key:
+    url: https://apt.releases.hashicorp.com/gpg
+    state: present
+
+- name: Add repository for terraform setup
+  become: true
+  ansible.builtin.apt_repository:
+    repo: deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release }} main
+    filename: terraform
+    state: present
+
+- name: Install terraform
+  become: true
+  apt:
+    name: terraform
+    update_cache: yes
+    state: present

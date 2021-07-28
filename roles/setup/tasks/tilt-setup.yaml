@@ -1,0 +1,32 @@
+---
+- name: Create temporary directory for tilt setup
+  file:
+    state: directory
+    path: '{{ playbook_dir }}/tmp/tilt-setup'
+  register: tilt_setup_tempdir
+
+- name: Fetch stable version for tilt
+  uri:
+    url: https://api.github.com/repos/tilt-dev/tilt/releases/latest
+    return_content: true
+  register: tilt_release_facts
+
+- name: Download tilt archive
+  get_url:
+    dest: '{{ tilt_setup_tempdir.path }}/tilt.tar.gz'
+    url: 'https://github.com/tilt-dev/tilt/releases/download/{{ tilt_release_facts.json.tag_name }}/tilt.{{ tilt_release_facts.json.tag_name | replace("v", "") }}.linux.x86_64.tar.gz'
+
+- name: Extract tilt archive
+  unarchive:
+    dest: '{{ tilt_setup_tempdir.path }}'
+    src: '{{ tilt_setup_tempdir.path }}/tilt.tar.gz'
+
+- name: Install tilt
+  become: true
+  copy:
+    dest: /usr/local/bin/tilt
+    group: root
+    mode: '0755'
+    owner: root
+    remote_src: yes
+    src: '{{ tilt_setup_tempdir.path }}/tilt'

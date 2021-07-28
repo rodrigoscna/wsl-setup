@@ -1,0 +1,19 @@
+---
+- name: Create temporary directory for vscode live share setup
+  file:
+    state: directory
+    path: '{{ playbook_dir }}/tmp/vsls-setup'
+  register: vsls_setup_tempdir
+
+- name: Download vsls script
+  get_url:
+    dest: '{{ vsls_setup_tempdir.path }}/install.sh'
+    mode: '0755'
+    url: 'https://aka.ms/vsls-linux-prereq-script'
+
+- name: Execute vsls script
+  become: true
+  shell:
+    cmd: '{{ vsls_setup_tempdir.path }}/install.sh'
+  args:
+    executable: /bin/bash

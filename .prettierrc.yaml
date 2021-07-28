@@ -1,0 +1,11 @@
+arrowParens: 'always'
+proseWrap: 'always'
+semi: false
+singleQuote: true
+trailingComma: 'all'
+overrides:
+  - files:
+      - '*.yaml'
+      - '*.yml'
+    options:
+      proseWrap: 'preserve'
